@@ -1,0 +1,26 @@
+{
+  "name": "adventurers-guild-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filipalimaa/adventurers-guild-tests.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/filipalimaa/adventurers-guild-tests/issues"
+  },
+  "homepage": "https://github.com/filipalimaa/adventurers-guild-tests#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.7.0",
+    "typescript": "^6.0.3"
+  }
+}
