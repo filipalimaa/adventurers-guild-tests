@@ -4,8 +4,8 @@ export async function getToken( request : APIRequestContext) {
     
     const response = await request.post('/api/auth/token', {
         data: {
-            username: process.env.USERNAME,
-            password: process.env.PASSWORD,
+            username: process.env.API_USERNAME,
+            password: process.env.API_PASSWORD,
         },
     });
 

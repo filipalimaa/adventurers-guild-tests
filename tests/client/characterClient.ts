@@ -7,14 +7,14 @@ export async function createCharacter(
     data: CharacterRequestPost,
 ) {
 
-    const createResponse = await request.post('/api/characters', {
+    const response = await request.post('/api/characters', {
         headers: { Authorization: 'Bearer ' + token },
         data
     });
 
-    const createCharacterResponse = await createResponse.json();
+    const createCharacterBody = await response.json();
 
-    return createCharacterResponse.id
+    return { response, createCharacterBody };
     
 };
 
@@ -25,12 +25,14 @@ export async function patchCharacterClass(
     data: CharacterRequestClassPatch
 ) {
 
-    const patchCharacterClass = await request.patch('/api/characters/' + charId, {
+    const response = await request.patch('/api/characters/' + charId, {
         headers: { Authorization: 'Bearer ' + token },
         data,
     });
 
-    return patchCharacterClass.json();
+    const patchCharacterClassBody = await response.json();
+
+    return { response, patchCharacterClassBody }; 
     
 };
 
@@ -41,12 +43,14 @@ export async function patchCharacterSpecie(
     data: CharacterRequestSpeciesPatch, 
 ) {
 
-    const patchCharacterSpecie = await request.patch('/api/characters/' + charId, {
+    const response = await request.patch('/api/characters/' + charId, {
         headers: { Authorization: 'Bearer ' + token },
         data,
     });
 
-    return patchCharacterSpecie.json();
+    const patchCharacterSpecieBody = await response.json();
+
+    return { response, patchCharacterSpecieBody };
     
 };
 
@@ -57,11 +61,13 @@ export async function patchCharacterBackground(
     data: CharacterRequestBackgroundPatch,
 ) {
 
-    const patchCharacterBackground = await request.patch('/api/characters/' + charId, {
+    const response = await request.patch('/api/characters/' + charId, {
         headers: { Authorization: 'Bearer ' + token },
         data,
     });
 
-    return patchCharacterBackground.json();
+    const patchCharacterBackgroundBody = await response.json();
+
+    return { response, patchCharacterBackgroundBody };
     
 }
