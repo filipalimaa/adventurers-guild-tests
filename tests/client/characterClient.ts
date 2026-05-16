@@ -1,5 +1,5 @@
 import type { APIRequestContext } from "@playwright/test";
-import type { CharacterRequestBackgroundPatch, CharacterRequestClassPatch, CharacterRequestPost, CharacterRequestSpeciesPatch } from "../types/characterRequest.js";
+import type { CharacterRequestBackgroundPatch, CharacterRequestClassPatch, CharacterRequestPost, CharacterRequestSpeciesPatch, PatchCharacterSkills } from "../types/characterRequest.js";
 
 export async function createCharacter( 
     request : APIRequestContext,
@@ -69,5 +69,23 @@ export async function patchCharacterBackground(
     const patchCharacterBackgroundBody = await response.json();
 
     return { response, patchCharacterBackgroundBody };
+    
+};
+
+export async function patchCharacterSkillsProficiencies(
+    request : APIRequestContext,
+    token: string,
+    charId: number,
+    data: PatchCharacterSkills,
+) {
+
+    const response = await request.patch('/api/characters/' + charId, {
+        headers: { Authorization: 'Bearer ' + token },
+        data
+    });
+
+    const patchCharacterSkillsResponse = await response.json();
+
+    return { response, patchCharacterSkillsResponse };
     
 }

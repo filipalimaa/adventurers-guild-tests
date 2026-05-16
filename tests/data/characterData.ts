@@ -1,4 +1,4 @@
-import type { AbilityScoresValues, CharacterAbilityScore, CharacterRequestBackgroundPatch, CharacterRequestClassPatch, CharacterRequestPost, CharacterRequestSpeciesPatch, PutAbilityScoresRequest } from "../types/characterRequest.js";
+import type { AbilityScoresValues, CharacterAbilityScore, CharacterRequestBackgroundPatch, CharacterRequestClassPatch, CharacterRequestPost, CharacterRequestSpeciesPatch, PatchCharacterSkills, PutAbilityScoresRequest } from "../types/characterRequest.js";
 
 export const CHARACTER_NAME: CharacterRequestPost = {
     name: 'Filara, the Wandering Sage',
@@ -41,4 +41,10 @@ export const ABILITYSCORES: CharacterAbilityScore = {
 
 export const CHARACTER_ABILITYSCORES: PutAbilityScoresRequest = {
     abilityScores: ABILITYSCORES,
+};
+
+export const CHARACTER_SKILLS: PatchCharacterSkills = {
+    skillProficiencies: ['Investigation', 'Insight']
+}
+=======
 };

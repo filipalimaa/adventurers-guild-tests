@@ -30,4 +30,8 @@ export interface CharacterAbilityScore {
 
 export interface PutAbilityScoresRequest {
     abilityScores: CharacterAbilityScore,
+};
+
+export interface PatchCharacterSkills {
+    skillProficiencies: string[],
 }

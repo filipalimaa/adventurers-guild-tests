@@ -82,7 +82,7 @@ interface SelectedAbilityScores {
     base: AbilityScoresValues;
     bonuses: AbilityScoresValues;
     final: AbilityScoresValues;
-}
+};
 
 export interface AbilityScoreResponsePut {
     characterId: number,
@@ -91,4 +91,13 @@ export interface AbilityScoreResponsePut {
     selectionRules: SelectionRules,
     selectedAbilityScores: SelectedAbilityScores | null,
     availableChoices: string[],
+};
+
+export interface GetSkillsResponse {
+    name: string,
+    ability: string,
+    isProficient: boolean,
+    abilityModifier: number,
+    proficiencyBonus: number,
+    total: number,
 }
