@@ -46,3 +46,5 @@ export const CHARACTER_ABILITYSCORES: PutAbilityScoresRequest = {
 export const CHARACTER_SKILLS: PatchCharacterSkills = {
     skillProficiencies: ['Investigation', 'Insight']
 }
+=======
+};
