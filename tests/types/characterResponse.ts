@@ -1,3 +1,5 @@
+import type { AbilityScoresValues } from "./characterRequest.js";
+
 interface ArmorClass {
     total: number,
     base: number,
@@ -53,3 +55,40 @@ export interface CharacterResponsePost {
     speciesDetails: string | null,
     backgroundDetails: string | null,
 };
+
+interface BonusChoice {
+    bonus: number;
+    count: number;
+    mustBeDifferentFromBonus: number;
+};
+
+interface BonusOption {
+    type: string;
+    choices: BonusChoice[];
+};
+
+interface BonusRules {
+    mode: string;
+    options: BonusOption[];
+};
+
+interface SelectionRules {
+    source: string;
+    allowedChoices: string[];
+    bonusRules: BonusRules;
+};
+
+interface SelectedAbilityScores {
+    base: AbilityScoresValues;
+    bonuses: AbilityScoresValues;
+    final: AbilityScoresValues;
+}
+
+export interface AbilityScoreResponsePut {
+    characterId: number,
+    backgroundId: number,
+    backgroundName: string,
+    selectionRules: SelectionRules,
+    selectedAbilityScores: SelectedAbilityScores | null,
+    availableChoices: string[],
+}
