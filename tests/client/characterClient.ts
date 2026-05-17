@@ -88,4 +88,20 @@ export async function patchCharacterSkillsProficiencies(
 
     return { response, patchCharacterSkillsResponse };
     
+};
+
+export async function getMyFinalCharacter(
+    request : APIRequestContext,
+    token: string,
+    charId: number,
+) {
+
+    const response = await request.get('/api/characters/' + charId, {
+        headers: { Authorization: 'Bearer ' + token },
+    });
+
+    const characterBody = await response.json();
+
+    return { response, characterBody };
+    
 }
