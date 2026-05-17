@@ -1,4 +1,4 @@
-import type { AbilityScoresValues, CharacterAbilityScore, CharacterRequestBackgroundPatch, CharacterRequestClassPatch, CharacterRequestPost, CharacterRequestSpeciesPatch, PatchCharacterSkills, PutAbilityScoresRequest } from "../types/characterRequest.js";
+import type { AbilityScoresValues, CharacterAbilityScore, CharacterRequestBackgroundPatch, CharacterRequestClassPatch, CharacterRequestPost, CharacterRequestSpeciesPatch, PatchCharacterSkills, PostBackgroundChoiceRequest, PostClassChoiceRequest, PostEquipmentRequest, PutAbilityScoresRequest } from "../types/characterRequest.js";
 
 export const CHARACTER_NAME: CharacterRequestPost = {
     name: 'Filara, the Wandering Sage',
@@ -45,6 +45,18 @@ export const CHARACTER_ABILITYSCORES: PutAbilityScoresRequest = {
 
 export const CHARACTER_SKILLS: PatchCharacterSkills = {
     skillProficiencies: ['Investigation', 'Insight']
-}
-=======
 };
+
+export const CHARACTER_CLASSEQUIPMENT: PostClassChoiceRequest = {
+    optionLabel: 'A',
+};
+
+export const CHARACTER_BACKGROUNDEQUIPMENT: PostBackgroundChoiceRequest = {
+    optionIndex: 0,
+};
+
+export const CHARACTER_EQUIPMENT: PostEquipmentRequest = {
+    equipmentId: 78,
+    quantity: 1,
+    isEquipped: false,
+}

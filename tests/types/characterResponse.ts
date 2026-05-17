@@ -100,4 +100,54 @@ export interface GetSkillsResponse {
     abilityModifier: number,
     proficiencyBonus: number,
     total: number,
-}
+};
+
+export interface CharacterEquipmentAuxiliar{
+    id: number,
+    name: string,
+    category: string,
+    type: string,
+    quantity: number,
+    isEquipped: boolean,
+};
+
+export interface CharacterEquipmentResponse {
+    characterId: number,
+    equipment: CharacterEquipmentAuxiliar[],
+};
+
+export interface AppliedChoiceAuxiliar {
+    source: string,
+    label: string,
+    optionIndex: number,
+};
+
+export interface AddedEquipmentAuxiliar {
+    id: number,
+    name: string,
+    quantity: number,
+    isEquipped: boolean,
+};
+
+export interface AddedCurrencyAuxiliar {
+    cp: number,
+    sp: number,
+    ep: number,
+    gp: number,
+    pp:number,
+};
+
+export interface SkippedItemAuxiliar {
+    name: string,
+    reason: string,
+};
+
+export interface EquipmentPackageChoiceResponse {
+    characterId: number,
+    appliedChoice: AppliedChoiceAuxiliar,
+    addedEquipment: AddedEquipmentAuxiliar[],
+    addedCurrency: AddedCurrencyAuxiliar,
+    skippedItems: SkippedItemAuxiliar[],
+    pendingChoices: string[],
+    equipment: CharacterEquipmentAuxiliar[],
+};
