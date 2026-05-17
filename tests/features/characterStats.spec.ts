@@ -8,7 +8,7 @@ import { expectStatusCode } from '../snippets/responseHelpers.js';
 let token = '';
 let characterId = 0;
 
-test.describe.serial('Character Stats Flow', () => {
+test.describe.serial('Character Stats Flow', { tag: ['@flow', '@stats'] }, () => {
 
     test.beforeAll(async ({ request }) => {
             token = await getToken(request);
@@ -20,7 +20,7 @@ test.describe.serial('Character Stats Flow', () => {
             await patchCharacterBackground(request, token, characterId, CHARACTER_BACKGROUNDId);
         });
 
-    test('Get Ability Scores Options', async ({ request }) => {
+    test('Get Ability Scores Options', { tag: ['@get', '@data'] }, async ({ request }) => {
 
         const { response, abilityScoresResponse } = await getAbilityScores(
             request,
@@ -35,7 +35,7 @@ test.describe.serial('Character Stats Flow', () => {
         expect(abilityScoresResponse.selectedAbilityScores).toBeNull();
     });
 
-    test('Put my Character Ability Scores', async ({ request }) => {
+    test('Put my Character Ability Scores', { tag: ['@put', '@smoke', '@data'] }, async ({ request }) => {
 
         const { response, characterAbilityScoresResponse } = await characterAbilityScoresPut(
             request,
@@ -65,7 +65,7 @@ test.describe.serial('Character Stats Flow', () => {
         
     });
 
-    test('Reject Invalid Ability Scores - Base Above Maximum', async ({ request }) => {
+    test('Reject Invalid Ability Scores - Base Above Maximum', { tag: ['@put', '@negative', '@error'] }, async ({ request }) => {
         const { response } = await characterAbilityScoresPut(
             request, token, characterId,
             {

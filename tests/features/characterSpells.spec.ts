@@ -9,7 +9,7 @@ let token = '';
 let characterId = 0;
 let selectedSpellIds: number[] = [];
 
-test.describe.serial('Character Spells Flow', () => {
+test.describe.serial('Character Spells Flow', { tag: ['@flow', '@spells'] }, () => {
 
     test.beforeAll(async ({ request }) => {
             token = await getToken(request);
@@ -21,7 +21,7 @@ test.describe.serial('Character Spells Flow', () => {
             await patchCharacterBackground(request, token, characterId, CHARACTER_BACKGROUNDId);
         });
 
-    test('Get Spells Options', async ({ request }) => {
+    test('Get Spells Options', { tag: ['@get', '@data'] }, async ({ request }) => {
 
         const { response, spellsOptionsResponse } = await getSpellsOptions(
             request,
@@ -35,7 +35,7 @@ test.describe.serial('Character Spells Flow', () => {
         
     });
 
-    test('Get Spells Selection', async ({ request }) => {
+    test('Get Spells Selection', { tag: ['@get', '@data'] }, async ({ request }) => {
 
         const { response, spellsSelectionResponse } = await getSpellsSelection(
             request,
@@ -63,7 +63,7 @@ test.describe.serial('Character Spells Flow', () => {
         
     });
 
-    test('Update Character Spells', async ({ request }) => {
+    test('Update Character Spells', { tag: ['@put', '@smoke', '@data'] }, async ({ request }) => {
 
         const { response, characterSpellsResponse } = await putCharacterSpells(
             request,
@@ -77,7 +77,7 @@ test.describe.serial('Character Spells Flow', () => {
         
     });
 
-    test('Reject Invalid Spell Selection - Non Existent Spell Id', async ({ request }) => {
+    test('Reject Invalid Spell Selection - Non Existent Spell Id', { tag: ['@put', '@negative', '@error'] }, async ({ request }) => {
         const { response } = await putCharacterSpells(
             request, token, characterId,
             { spellIds: [999999] }

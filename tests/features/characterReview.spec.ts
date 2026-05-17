@@ -11,7 +11,7 @@ let token = '';
 let characterId = 0;
 let selectedSpellIds: number[] = [];
 
-test.describe.serial('Character Review Flow', () => {
+test.describe.serial('Character Review Flow', { tag: ['@flow', '@review', '@smoke'] }, () => {
 
     test.beforeAll(async ({ request }) => {
             token = await getToken(request);
@@ -44,7 +44,7 @@ test.describe.serial('Character Review Flow', () => {
             await putCharacterSpells(request, token, characterId, {spellIds: selectedSpellIds});
         });
 
-    test('Review Final My Final Character', async ({ request }) => {
+    test('Review Final My Final Character', { tag: ['@get', '@smoke', '@data'] }, async ({ request }) => {
 
         const { response, characterBody } = await getMyFinalCharacter(
             request,
