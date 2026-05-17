@@ -151,3 +151,27 @@ export interface EquipmentPackageChoiceResponse {
     pendingChoices: string[],
     equipment: CharacterEquipmentAuxiliar[],
 };
+
+export interface AvailableChoicesAuxiliar {
+    id: number,
+    name: string,
+    level: number,
+    levelLabel: string,
+};
+
+export interface SpellOptionsResponse {
+    characterId: number,
+    classId: number,
+    className: string,
+    spells: AvailableChoicesAuxiliar[],
+};
+
+export interface CharacterSpellsResponse {
+    characterId: number,
+    classId: number,
+    className: string,
+    level: number,
+    selectionRules: SelectionRules,
+    selectedSpells: AvailableChoicesAuxiliar[],
+    availableSpells: AvailableChoicesAuxiliar[] 
+}

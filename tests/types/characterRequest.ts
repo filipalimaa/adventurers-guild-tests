@@ -48,4 +48,8 @@ export interface PostEquipmentRequest {
     equipmentId: number,
     quantity: number,
     isEquipped: boolean,
+};
+
+export interface PutCharacterSpellsRequest {
+    spellIds: number[],
 }
