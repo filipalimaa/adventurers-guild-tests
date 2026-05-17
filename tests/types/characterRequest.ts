@@ -34,4 +34,18 @@ export interface PutAbilityScoresRequest {
 
 export interface PatchCharacterSkills {
     skillProficiencies: string[],
+};
+
+export interface PostClassChoiceRequest {
+    optionLabel: string,
+};
+
+export interface PostBackgroundChoiceRequest {
+    optionIndex: number,
+};
+
+export interface PostEquipmentRequest {
+    equipmentId: number,
+    quantity: number,
+    isEquipped: boolean,
 }
