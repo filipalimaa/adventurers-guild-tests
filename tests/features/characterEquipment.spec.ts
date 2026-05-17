@@ -8,7 +8,7 @@ import { characterEquipment, equipmentBackgroundChoice, equipmentClassChoice } f
 let token = '';
 let characterId = 0;
 
-test.describe.serial('Character Equipment Flow', () => {
+test.describe.serial('Character Equipment Flow', { tag: ['@flow', '@equipment'] }, () => {
 
     test.beforeAll(async ({ request }) => {
             token = await getToken(request);
@@ -20,7 +20,7 @@ test.describe.serial('Character Equipment Flow', () => {
             await patchCharacterBackground(request, token, characterId, CHARACTER_BACKGROUNDId);
         });
 
-    test('Add Character Class Equipment Choice', async ({ request }) => {
+    test('Add Character Class Equipment Choice', { tag: ['@post', '@data'] }, async ({ request }) => {
 
         const { response, equipmentClassChoiceResponse } = await equipmentClassChoice(
             request,
@@ -38,7 +38,7 @@ test.describe.serial('Character Equipment Flow', () => {
     
     });
 
-    test('Add Character Background Equipment Choice', async ({ request }) => {
+    test('Add Character Background Equipment Choice', { tag: ['@post', '@data'] }, async ({ request }) => {
 
         const { response, equipmentBackgroundChoiceResponse } = await equipmentBackgroundChoice(
             request,
@@ -56,7 +56,7 @@ test.describe.serial('Character Equipment Flow', () => {
         
     });
 
-    test('Add Character Equipment Other Choices', async ({ request }) => {
+    test('Add Character Equipment Other Choices', { tag: ['@post', '@data'] }, async ({ request }) => {
 
         const { response, characterEquipmentResponse } = await characterEquipment(
             request,
@@ -71,7 +71,7 @@ test.describe.serial('Character Equipment Flow', () => {
         
     });
 
-    test('Reject Invalid Equipment - Non Existent Equipment Id', async ({ request }) => {
+    test('Reject Invalid Equipment - Non Existent Equipment Id', { tag: ['@post', '@negative', '@error'] }, async ({ request }) => {
         
         const { response } = await characterEquipment(
             request, token, characterId,

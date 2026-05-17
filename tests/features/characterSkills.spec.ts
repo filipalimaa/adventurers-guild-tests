@@ -9,7 +9,7 @@ import { characterAbilityScoresPut } from '../client/characterAbilityScores.js';
 let token = '';
 let characterId = 0;
 
-test.describe.serial('Character Skills Flow', () => {
+test.describe.serial('Character Skills Flow', { tag: ['@flow', '@skills'] }, () => {
 
     test.beforeAll(async ({ request }) => {
             token = await getToken(request);
@@ -23,7 +23,7 @@ test.describe.serial('Character Skills Flow', () => {
 
         });
 
-    test('Get Skills Proficiencies Options', async ({ request }) => {
+    test('Get Skills Proficiencies Options', { tag: ['@get', '@data'] }, async ({ request }) => {
 
         const { response, skillsProficienciesResponse } = await getSkillsProficiencies(
             request,
@@ -45,7 +45,7 @@ test.describe.serial('Character Skills Flow', () => {
         
     });
 
-    test('Patch Other Skills Profiencies', async ({ request }) => {
+    test('Patch Other Skills Profiencies', { tag: ['@patch', '@data'] }, async ({ request }) => {
 
         const { response, patchCharacterSkillsResponse } = await patchCharacterSkillsProficiencies(
             request,
@@ -61,7 +61,7 @@ test.describe.serial('Character Skills Flow', () => {
         
     });
 
-    test('Validate Filara Skills Calculation After Patch', async ({ request }) => {
+    test('Validate Filara Skills Calculation After Patch', { tag: ['@get', '@smoke', '@data'] }, async ({ request }) => {
     const { response, skillsProficienciesResponse } = await getSkillsProficiencies(
         request, token, characterId,
     );

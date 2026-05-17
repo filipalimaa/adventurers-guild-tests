@@ -7,13 +7,13 @@ import { expectFieldsAreNull, expectStatusCode, expectValidId } from '../snippet
 let token = '';
 let characterId = 0;
 
-test.describe.serial('Character Creation Flow', () => {
+test.describe.serial('Character Creation Flow', { tag: ['@flow', '@creation'] }, () => {
 
     test.beforeAll(async ({ request }) => {
         token = await getToken(request);
     });
 
-    test('Create My Character', async ({ request }) => {
+    test('Create My Character', { tag: ['@post', '@smoke', '@data'] }, async ({ request }) => {
 
         const { response, createCharacterBody } = await createCharacter(
             request,
@@ -35,7 +35,7 @@ test.describe.serial('Character Creation Flow', () => {
         
     });
 
-    test('Validate my Character Class', async ({ request }) => {
+    test('Validate my Character Class', { tag: ['@patch', '@data'] }, async ({ request }) => {
 
         const { response, patchCharacterClassBody } = await patchCharacterClass(
             request,
@@ -51,7 +51,7 @@ test.describe.serial('Character Creation Flow', () => {
         expect(patchCharacterClassBody.pendingChoices).toContain('classEquipmentSelection');
     });
 
-    test('Validate my Character Specie', async ({ request }) => {
+    test('Validate my Character Specie', { tag: ['@patch', '@data'] }, async ({ request }) => {
 
         const { response, patchCharacterSpecieBody } = await patchCharacterSpecie(
             request,
@@ -67,7 +67,7 @@ test.describe.serial('Character Creation Flow', () => {
 
     });
 
-    test('Validate my Character Background', async ({ request }) => {
+    test('Validate my Character Background', { tag: ['@patch', '@data'] }, async ({ request }) => {
 
         const { response, patchCharacterBackgroundBody } = await patchCharacterBackground(
             request,
