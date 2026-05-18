@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:ital,wght@0,400;0,700;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#1a0f00;font-family:'Lato',serif;color:#c8a96e;min-height:100vh;padding:12px;}
+.board{max-width:1000px;margin:0 auto;background:#f5e6c8;border:3px solid #8B6914;border-radius:4px;box-shadow:0 0 40px rgba(139,105,20,0.4);overflow:hidden;position:relative;}
+.board::before{content:'';position:absolute;inset:6px;border:1px solid rgba(139,105,20,0.3);pointer-events:none;z-index:10;border-radius:2px;}
+.header{background:linear-gradient(180deg,#2a1800 0%,#1a1000 100%);border-bottom:3px solid #8B6914;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.header-left h1{font-family:'Cinzel',serif;font-size:17px;color:#FFD700;letter-spacing:3px;}
+.header-left p{font-size:10px;color:#8B6914;letter-spacing:2px;margin-top:3px;font-style:italic;}
+.score-box{text-align:center;background:rgba(255,215,0,0.1);border:1px solid #8B6914;border-radius:4px;padding:6px 16px;}
+.score-num{font-family:'Cinzel',serif;font-size:24px;color:#FFD700;line-height:1;}
+.score-lbl{font-size:9px;color:#8B6914;letter-spacing:2px;}
+.main-layout{display:grid;grid-template-columns:180px 1fr;min-height:500px;}
+.sidebar{background:linear-gradient(180deg,#2a1800 0%,#1f1200 100%);border-right:2px solid #8B6914;padding:20px 12px;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.char-portrait{width:140px;height:170px;border:2px solid #8B6914;border-radius:4px;overflow:hidden;background:#111;}
+.char-portrait img{width:100%;height:100%;object-fit:cover;object-position:center top;}
+.char-name{font-family:'Cinzel',serif;font-size:11px;color:#FFD700;text-align:center;letter-spacing:1px;line-height:1.4;}
+.char-sub{font-size:9px;color:#8B6914;text-align:center;letter-spacing:1px;line-height:1.6;}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,#8B6914,transparent);}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;width:100%;}
+.stat-box{background:rgba(139,105,20,0.15);border:1px solid rgba(139,105,20,0.4);border-radius:3px;padding:4px;text-align:center;}
+.stat-val{font-family:'Cinzel',serif;font-size:14px;color:#FFD700;}
+.stat-key{font-size:8px;color:#8B6914;letter-spacing:1px;}
+.scene-pip-row{display:flex;justify-content:center;gap:4px;flex-wrap:wrap;}
+.scene-pip{width:10px;height:10px;border-radius:50%;border:1px solid #3a2a00;background:#1a1000;cursor:pointer;transition:all 0.2s;}
+.scene-pip.active{background:#FFD700;border-color:#FFD700;}
+.scene-pip.done{background:#4a9e2a;border-color:#4a9e2a;}
+.content{display:flex;flex-direction:column;}
+.scene-tabs{display:flex;background:#2a1800;border-bottom:2px solid #8B6914;overflow-x:auto;scrollbar-width:none;padding-top:16px;}
+.scene-tabs::-webkit-scrollbar{display:none;}
+.scene-tab{flex-shrink:0;padding:8px 14px;font-family:'Cinzel',serif;font-size:10px;color:#5a4a00;cursor:pointer;border-bottom:3px solid transparent;letter-spacing:1px;transition:all 0.2s;white-space:nowrap;}
+.scene-tab:hover{color:#c8a96e;}
+.scene-tab.active{color:#FFD700;border-bottom-color:#FFD700;}
+.scene-tab.done{color:#4a9e2a;}
+.scene-tab .tab-num{display:block;font-size:8px;color:#3a2a00;margin-bottom:2px;}
+.scene-tab.active .tab-num{color:#8B6914;}
+.scene-body{flex:1;padding:20px;background:#f5e6c8;}
+.scene-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(139,105,20,0.3);}
+.scene-title{font-family:'Cinzel',serif;font-size:20px;color:#2a1800;}
+.scene-endpoint{font-family:'Courier New',monospace;font-size:11px;color:#4a7a2a;background:rgba(74,122,42,0.1);border:1px solid rgba(74,122,42,0.3);padding:4px 10px;border-radius:3px;}
+.two-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.col-label{font-family:'Cinzel',serif;font-size:9px;color:#8B6914;letter-spacing:2px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid rgba(139,105,20,0.2);}
+.keywords{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.kw{background:rgba(42,24,0,0.08);border:1px solid rgba(139,105,20,0.3);color:#2a1800;font-size:11px;padding:3px 10px;border-radius:2px;font-style:italic;}
+.tests-area{min-height:120px;}
+.test-row{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:3px;margin-bottom:4px;opacity:0;transform:translateX(-10px);transition:all 0.3s;background:rgba(255,255,255,0.5);border-left:3px solid transparent;}
+.test-row.visible{opacity:1;transform:translateX(0);}
+.test-row.pass{border-left-color:#4a9e2a;}
+.test-row.negative{border-left-color:#c0392b;}
+.test-label{font-size:11px;color:#2a1800;line-height:1.3;}
+.test-badge{margin-left:auto;font-size:9px;padding:1px 6px;border-radius:2px;flex-shrink:0;font-family:'Cinzel',serif;}
+.test-badge.pass{background:#d4edda;color:#1a5c2a;border:1px solid #4a9e2a;}
+.test-badge.negative{background:#f8d7da;color:#721c24;border:1px solid #c0392b;}
+.run-btn{display:flex;align-items:center;gap:6px;background:#2a1800;border:1px solid #8B6914;color:#FFD700;font-family:'Cinzel',serif;font-size:11px;padding:7px 14px;border-radius:3px;cursor:pointer;letter-spacing:1px;transition:all 0.2s;margin-top:10px;}
+.run-btn:hover{background:#3a2200;border-color:#FFD700;}
+.dice-section{background:rgba(42,24,0,0.06);border:1px solid rgba(139,105,20,0.3);border-radius:3px;padding:12px;margin-top:12px;}
+.dice-title{font-family:'Cinzel',serif;font-size:9px;color:#8B6914;letter-spacing:2px;margin-bottom:8px;}
+.dice-row{display:flex;gap:8px;align-items:center;}
+.dice-btn{background:#2a1800;border:1px solid #8B6914;color:#FFD700;font-family:'Cinzel',serif;font-size:11px;padding:6px 12px;border-radius:3px;cursor:pointer;letter-spacing:1px;transition:all 0.2s;flex-shrink:0;}
+.dice-btn:hover{background:#3a2200;border-color:#FFD700;}
+.dice-result{font-size:11px;color:#2a1800;font-style:italic;line-height:1.4;flex:1;}
+.dice-result.crit{color:#8B6914;font-weight:bold;}
+.dice-result.fail{color:#c0392b;}
+.controls{display:flex;gap:8px;align-items:center;padding:10px 20px;background:#2a1800;border-top:2px solid #8B6914;}
+.ctrl-btn{background:#1a1000;border:1px solid #8B6914;color:#c8a96e;font-family:'Cinzel',serif;font-size:10px;padding:6px 12px;border-radius:3px;cursor:pointer;letter-spacing:1px;transition:all 0.2s;}
+.ctrl-btn:hover{background:#2a1800;color:#FFD700;}
+.ctrl-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.ctrl-btn.gold{border-color:#FFD700;color:#FFD700;}
+.ctrl-sep{flex:1;}
+.ctrl-info{font-size:9px;color:#5a4a00;letter-spacing:1px;}
+.flash-overlay{position:fixed;inset:0;background:rgba(255,215,0,0.15);pointer-events:none;opacity:0;transition:opacity 0.3s;z-index:100;}
+.flash-overlay.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="flash-overlay" id="flash"></div>
+<div class="board">
+  <div class="header">
+    <div class="header-left">
+      <h1>ADVENTURERS GUILD - API TESTING QUEST</h1>
+      <p>Backend Automation Testing - Final Project - Filipa Lima - Mindera Code Academy</p>
+    </div>
+    <div class="score-box">
+      <div class="score-num" id="score">0/7</div>
+      <div class="score-lbl">QUESTS DONE</div>
+    </div>
+  </div>
+  <div class="main-layout">
+    <div class="sidebar">
+      <div class="char-portrait">
+        <img src="filara.png" alt="Filara" onerror="this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;color:#FFD700;\'>F</div>'" />
+      </div>
+      <div class="char-name">Filara<br>the Wandering Sage</div>
+      <div class="char-sub">GNOME - WIZARD<br>SAGE - LEVEL 1</div>
+      <div class="divider"></div>
+      <div class="stat-grid">
+        <div class="stat-box"><div class="stat-val">8</div><div class="stat-key">STR</div></div>
+        <div class="stat-box"><div class="stat-val">14</div><div class="stat-key">DEX</div></div>
+        <div class="stat-box"><div class="stat-val">13</div><div class="stat-key">CON</div></div>
+        <div class="stat-box" style="background:rgba(255,215,0,0.15);border-color:#FFD700;"><div class="stat-val" style="color:#FFD700;">17</div><div class="stat-key">INT</div></div>
+        <div class="stat-box"><div class="stat-val">13</div><div class="stat-key">WIS</div></div>
+        <div class="stat-box"><div class="stat-val">8</div><div class="stat-key">CHA</div></div>
+      </div>
+      <div class="divider"></div>
+      <div style="width:100%;">
+        <div class="col-label" style="text-align:center;margin-bottom:8px;">JOURNEY</div>
+        <div class="scene-pip-row" id="pip-row"></div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="scene-tabs" id="scene-tabs"></div>
+      <div class="scene-body" id="scene-body">
+        <div style="display:flex;align-items:center;justify-content:center;height:200px;color:#8B6914;font-family:'Cinzel',serif;font-size:14px;letter-spacing:2px;">
+          Select a scene to begin the quest
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="ctrl-btn" id="prev-btn" onclick="navigate(-1)" disabled>Prev</button>
+    <button class="ctrl-btn" id="next-btn" onclick="navigate(1)" disabled>Next</button>
+    <button class="ctrl-btn gold" id="complete-btn" onclick="completeScene()" disabled>Quest Complete</button>
+    <div class="ctrl-sep"></div>
+    <span class="ctrl-info" id="ctrl-info">Begin your quest above</span>
+    <button class="ctrl-btn" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+<script>
+const scenes=[
+  {id:1,tab:"Birth",title:"The Birth of a Legend",endpoint:"POST /api/characters",
+   keywords:["Draft created","Name inscribed","Status: draft","3 missing fields"],
+   tests:[
+     {label:"Status 201 Created",type:"pass"},
+     {label:"Valid character ID > 0",type:"pass"},
+     {label:"status is 'draft'",type:"pass"},
+     {label:"name is 'Filara, the Wandering Sage'",type:"pass"},
+     {label:"missingFields has classId, speciesId, backgroundId",type:"pass"},
+     {label:"level is 1",type:"pass"},
+   ],
+   dice:["A name is inscribed in the Guild ledger. The magic holds.","The quill slips but the name endures. Draft saved.","The Guild Master acknowledges the birth of a legend.","The ink fades... but Filara refuses to disappear."]
+  },
+  {id:2,tab:"Identity",title:"Choosing the Path",endpoint:"PATCH /api/characters/{id} x3",
+   keywords:["Wizard - knowledge is power","Gnome - born curious","Sage - wisdom from hardship","3 PATCH calls"],
+   tests:[
+     {label:"classId is Wizard (12)",type:"pass"},
+     {label:"speciesId is Gnome (4)",type:"pass"},
+     {label:"backgroundId is Sage (13)",type:"pass"},
+     {label:"missingFields is empty",type:"pass"},
+     {label:"pendingChoices: classEquipmentSelection",type:"pass"},
+     {label:"status is 'in_progress'",type:"pass"},
+   ],
+   dice:["The Gnome curiosity guides every step. The path is chosen.","A moment of doubt but Filara opens the spellbook. Wizard it is.","Three choices made with absolute certainty.","The Guild warns: this path is difficult. Filara smiles and walks it anyway."]
+  },
+  {id:3,tab:"Power",title:"The Inner Power",endpoint:"GET ability-score-options + PUT ability-scores",
+   keywords:["Read the rules first","INT 17 - primary ability","WIS 13 - earned wisdom","Sage bonuses: +2 INT +1 WIS"],
+   tests:[
+     {label:"GET: backgroundName is 'Sage'",type:"pass"},
+     {label:"GET: availableChoices CON, INT, WIS",type:"pass"},
+     {label:"PUT: base INT is 15",type:"pass"},
+     {label:"PUT: final INT is 17 (bonuses applied)",type:"pass"},
+     {label:"PUT: final WIS is 13",type:"pass"},
+     {label:"REJECT: base above 15 returns 400",type:"negative"},
+   ],
+   dice:["Intelligence flares. The spellbook glows gold. INT 17 confirmed.","The DM checks the rules. GET before PUT. Order respected.","Every ability score lands exactly where it should.","A wrong value is attempted. The Guild rejects it. 400 Bad Request."]
+  },
+  {id:4,tab:"Skills",title:"Skills of the Scholar",endpoint:"GET /skills + PATCH skillProficiencies",
+   keywords:["Arcana and History - from Sage","Investigation - restless mind","Insight - reads between lines","Arcana total = 3 + 2 = 5"],
+   tests:[
+     {label:"Arcana isProficient: true",type:"pass"},
+     {label:"Arcana abilityModifier is 3 (INT 17)",type:"pass"},
+     {label:"Arcana total is 5 (modifier + proficiency)",type:"pass"},
+     {label:"Investigation isProficient: true",type:"pass"},
+     {label:"Insight isProficient: true",type:"pass"},
+     {label:"Stealth isProficient: false",type:"pass"},
+   ],
+   dice:["Filara opens an ancient tome. The knowledge flows naturally.","Investigation check - Filara finds what others miss.","All skill calculations are mathematically perfect.","Stealth fails - Filara was never meant to hide in the shadows."]
+  },
+  {id:5,tab:"Equipment",title:"Arming for Adventure",endpoint:"POST /equipment/class-choice + background-choice",
+   keywords:["Class: Quarterstaff + Robe","Background: Sage pack","Locking Spellbook (id: 78)","pendingChoices empty"],
+   tests:[
+     {label:"Class choice: source is 'class', label 'A'",type:"pass"},
+     {label:"Background: Robe added to inventory",type:"pass"},
+     {label:"pendingChoices is empty after both choices",type:"pass"},
+     {label:"Locking Spellbook in equipment",type:"pass"},
+     {label:"REJECT: equipmentId 999999 returns 404",type:"negative"},
+   ],
+   dice:["The Locking Spellbook hums with arcane energy. Equipped.","The quarterstaff finds its way to Filara's hand. Ready.","All equipment resolves without a single conflict.","A ghost item is attempted. The Guild responds: 404 Not Found."]
+  },
+  {id:6,tab:"Spells",title:"Words of Power",endpoint:"GET spell-options + GET spell-selection + PUT /spells",
+   keywords:["canCastSpells: true","3 cantrips - daily magic","6 spells level 1 - reserved","IDs selected dynamically"],
+   tests:[
+     {label:"className is 'Wizard'",type:"pass"},
+     {label:"canSelectSpells is true",type:"pass"},
+     {label:"maxCantrips: 3 - maxSpells: 6",type:"pass"},
+     {label:"selectedSpells has length 9",type:"pass"},
+     {label:"3 cantrips (level 0) + 6 spells (level 1+)",type:"pass"},
+     {label:"REJECT: invalid spellId returns 400",type:"negative"},
+   ],
+   dice:["The grimoire opens. Nine spells inscribed in golden light.","A cantrip flows effortlessly - Filara daily magic.","All 9 spells saved. The Locking Spellbook seals shut.","An invalid spell is attempted. The Guild: 400 Forbidden magic."]
+  },
+  {id:7,tab:"Complete",title:"The Final Review",endpoint:"GET /api/characters/{id}",
+   keywords:["status: complete","All fields validated","9 spells - 4 skills","The journey ends here"],
+   tests:[
+     {label:"status is 'complete'",type:"pass"},
+     {label:"missingFields is empty",type:"pass"},
+     {label:"pendingChoices is empty",type:"pass"},
+     {label:"abilityScores: INT 17 - WIS 13",type:"pass"},
+     {label:"spellcastingSummary.canCastSpells: true",type:"pass"},
+     {label:"selectedSpells length is 9",type:"pass"},
+     {label:"Arcana, History, Investigation, Insight",type:"pass"},
+     {label:"currency is not null",type:"pass"},
+   ],
+   dice:["The Guild Master unrolls the great scroll. COMPLETE.","Every field validated. Every choice justified. Filara is ready.","A flawless character. The adventure begins.","The Wandering Sage has found her path. Status: complete."]
+  }
+];
+
+let current=-1,done=[],testsShown=false;
+
+function renderTabs(){
+  const tabs=document.getElementById('scene-tabs');
+  tabs.innerHTML='';
+  scenes.forEach((s,i)=>{
+    const t=document.createElement('div');
+    t.className='scene-tab'+(current===i?' active':'')+(done.includes(i)?' done':'');
+    t.onclick=()=>selectScene(i);
+    t.innerHTML='<span class="tab-num">SCENE '+s.id+'</span>'+s.tab;
+    tabs.appendChild(t);
+  });
+}
+
+function renderPips(){
+  const row=document.getElementById('pip-row');
+  row.innerHTML='';
+  scenes.forEach((_,i)=>{
+    const p=document.createElement('div');
+    p.className='scene-pip'+(current===i?' active':done.includes(i)?' done':'');
+    p.onclick=()=>selectScene(i);
+    row.appendChild(p);
+  });
+}
+
+function selectScene(index){
+  current=index;testsShown=false;
+  renderTabs();renderPips();
+  const s=scenes[index];
+  document.getElementById('prev-btn').disabled=index===0;
+  document.getElementById('next-btn').disabled=index===scenes.length-1;
+  document.getElementById('complete-btn').disabled=done.includes(index);
+  document.getElementById('ctrl-info').textContent='Scene '+(index+1)+' of '+scenes.length;
+  const kws=s.keywords.map(function(k){return '<span class="kw">'+k+'</span>';}).join('');
+  document.getElementById('scene-body').innerHTML=
+    '<div class="scene-title-row">'+
+      '<div class="scene-title">'+s.title+'</div>'+
+      '<span class="scene-endpoint">'+s.endpoint+'</span>'+
+    '</div>'+
+    '<div class="two-cols">'+
+      '<div>'+
+        '<div class="col-label">The Challenge</div>'+
+        '<div class="keywords">'+kws+'</div>'+
+        '<div class="dice-section">'+
+          '<div class="dice-title">Roll for Fate</div>'+
+          '<div class="dice-row">'+
+            '<button class="dice-btn" onclick="rollDice('+index+')">Roll d20</button>'+
+            '<div class="dice-result" id="dice-res">What will fate decide?</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div>'+
+        '<div class="col-label">Proofs of Merit</div>'+
+        '<div class="tests-area" id="tests-area">'+
+          '<div style="color:#8B6914;font-size:11px;font-style:italic;padding:8px 0;">Click Run Tests to validate this scene...</div>'+
+        '</div>'+
+        '<button class="run-btn" onclick="runTests('+index+')">Run Tests</button>'+
+      '</div>'+
+    '</div>';
+}
+
+function runTests(index){
+  const area=document.getElementById('tests-area');
+  const s=scenes[index];
+  area.innerHTML='';
+  s.tests.forEach(function(t,i){
+    const row=document.createElement('div');
+    row.className='test-row '+t.type;
+    const icon='<span style="font-size:11px;color:'+(t.type==='pass'?'#4a9e2a':'#c0392b')+';flex-shrink:0;">'+(t.type==='pass'?'PASS':'NEG')+'</span>';
+    row.innerHTML=icon+'<span class="test-label">'+t.label+'</span><span class="test-badge '+t.type+'">'+(t.type==='pass'?'PASS':'NEGATIVE')+'</span>';
+    area.appendChild(row);
+    setTimeout(function(){row.classList.add('visible');},i*200);
+  });
+  setTimeout(function(){flash();},s.tests.length*200+300);
+}
+
+function flash(){
+  var f=document.getElementById('flash');
+  f.classList.add('show');
+  setTimeout(function(){f.classList.remove('show');},500);
+}
+
+function rollDice(index){
+  var roll=Math.floor(Math.random()*20)+1;
+  var s=scenes[index];
+  var msgs=s.dice;
+  var msg,cls='';
+  if(roll===20){msg='Natural 20! - '+msgs[2];cls='crit';}
+  else if(roll===1){msg='Critical Fail! - '+msgs[3];cls='fail';}
+  else if(roll>=15){msg='Rolled '+roll+' - '+msgs[0];}
+  else if(roll>=10){msg='Rolled '+roll+' - '+msgs[1];}
+  else{msg='Rolled '+roll+' - '+msgs[3];cls='fail';}
+  var el=document.getElementById('dice-res');
+  if(el){el.textContent=msg;el.className='dice-result '+cls;}
+}
+
+function navigate(dir){
+  var n=current+dir;
+  if(n>=0&&n<scenes.length)selectScene(n);
+}
+
+function completeScene(){
+  if(current>=0&&!done.includes(current)){
+    done.push(current);
+    document.getElementById('score').textContent=done.length+'/'+scenes.length;
+    document.getElementById('complete-btn').disabled=true;
+    flash();renderTabs();renderPips();
+    if(current<scenes.length-1)setTimeout(function(){navigate(1);},400);
+  }
+}
+
+function resetAll(){
+  current=-1;done=[];testsShown=false;
+  document.getElementById('score').textContent='0/'+scenes.length;
+  document.getElementById('prev-btn').disabled=true;
+  document.getElementById('next-btn').disabled=true;
+  document.getElementById('complete-btn').disabled=true;
+  document.getElementById('ctrl-info').textContent='Begin your quest above';
+  document.getElementById('scene-body').innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:200px;color:#8B6914;font-family:Cinzel,serif;font-size:14px;letter-spacing:2px;">Select a scene to begin the quest</div>';
+  renderTabs();renderPips();
+}
+
+renderTabs();renderPips();selectScene(0);
+</script>
+</body>
+</html>
