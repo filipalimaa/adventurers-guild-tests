@@ -49,6 +49,8 @@ test.describe.serial('Character Creation Flow', { tag: ['@flow', '@creation'] },
         expect(patchCharacterClassBody.classId).toBe(CHARACTER_CLASSId.classId);
         expect(patchCharacterClassBody.missingFields).not.toContain('classId');
         expect(patchCharacterClassBody.pendingChoices).toContain('classEquipmentSelection');
+        expect(patchCharacterClassBody.status).toBe('in_progress');
+
     });
 
     test('Validate my Character Specie', { tag: ['@patch', '@data'] }, async ({ request }) => {
@@ -82,6 +84,9 @@ test.describe.serial('Character Creation Flow', { tag: ['@flow', '@creation'] },
         expect(patchCharacterBackgroundBody.missingFields).toHaveLength(0);
         expect(patchCharacterBackgroundBody.missingFields).not.toContain('backgroundId');
         expect(patchCharacterBackgroundBody.status).not.toBe('draft');
+        expect(patchCharacterBackgroundBody.skillProficiencies).toContain('Arcana');
+        expect(patchCharacterBackgroundBody.skillProficiencies).toContain('History');
+        
     });
 
 })
