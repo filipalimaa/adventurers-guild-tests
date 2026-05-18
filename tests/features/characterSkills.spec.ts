@@ -62,23 +62,31 @@ test.describe.serial('Character Skills Flow', { tag: ['@flow', '@skills'] }, () 
     });
 
     test('Validate Filara Skills Calculation After Patch', { tag: ['@get', '@smoke', '@data'] }, async ({ request }) => {
-    const { response, skillsProficienciesResponse } = await getSkillsProficiencies(
-        request, token, characterId,
-    );
+        const { response, skillsProficienciesResponse } = await getSkillsProficiencies(
+            request, token, characterId,
+        );
 
-    expectStatusCode(response, 200);
+        expectStatusCode(response, 200);
 
-    const arcana = skillsProficienciesResponse.find((s: any) => s.name === 'Arcana');
-    expect(arcana.isProficient).toBe(true);
-    expect(arcana.total).toBe(5);
+        const arcana = skillsProficienciesResponse.find((s: any) => s.name === 'Arcana');
+        expect(arcana.isProficient).toBe(true);
+        expect(arcana.total).toBe(5);
 
-    const investigation = skillsProficienciesResponse.find((s: any) => s.name === 'Investigation');
-    expect(investigation.isProficient).toBe(true);
-    expect(investigation.total).toBe(5);
+        const investigation = skillsProficienciesResponse.find((s: any) => s.name === 'Investigation');
+        expect(investigation.isProficient).toBe(true);
+        expect(investigation.total).toBe(5);
 
-    const stealth = skillsProficienciesResponse.find((s: any) => s.name === 'Stealth');
-    expect(stealth.isProficient).toBe(false);
-    expect(stealth.total).toBe(2);
-});
+        const stealth = skillsProficienciesResponse.find((s: any) => s.name === 'Stealth');
+        expect(stealth.isProficient).toBe(false);
+        expect(stealth.total).toBe(2);
+    });
+
+    test('Reject invalid skill count', async ({ request }) => {
+        const { response } = await patchCharacterSkillsProficiencies(
+            request, token, characterId,
+            { skillProficiencies: ['Investigation', 'Insight', 'Religion'] }
+        );
+        expectStatusCode(response, 400);
+    });
 
 })
